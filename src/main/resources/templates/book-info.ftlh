@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Library</title>
+    <title>${book.author} ${book.name}</title>
 </head>
 <body>
 <h1>Let's see!</h1>

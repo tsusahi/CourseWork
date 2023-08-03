@@ -4,8 +4,11 @@
     <title>Library</title>
 </head>
 <body>
-<h1>Welcome!</h1>
-<hr>
+<h1>Welcome! | <a href="/login">Login</a> </h1><hr>
+<form action="/logout" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="Exist"/>
+</form>
 <h4>Books from all over the world live here!</h4>
 <form action="/" method="get">
     Find by name: <input type="text" name="name"><br>
