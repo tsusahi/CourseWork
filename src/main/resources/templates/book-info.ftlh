@@ -12,9 +12,5 @@
 </#list>
 <b>About book: </b>${book.description}<br>
 <b>Price: </b>${book.price}<br>
-<hr>
-<form action="/book/delete/${book.id}" method="post">
-    <input type="submit" value="Delete book">
-</form>
 </body>
 </html>

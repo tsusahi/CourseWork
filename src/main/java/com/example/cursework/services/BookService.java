@@ -2,13 +2,16 @@ package com.example.cursework.services;
 
 import com.example.cursework.models.Book;
 import com.example.cursework.models.Image;
+import com.example.cursework.models.User;
 import com.example.cursework.repositories.BookRepository;
+import com.example.cursework.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -16,13 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
 
     public List<Book> bookList(String name) {
         if(name != null) return bookRepository.findByName(name);
         return bookRepository.findAll();
     }
 
-    public void saveBook(Book book, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+    public void saveBook(Principal principal, Book book, MultipartFile file1, MultipartFile file2, MultipartFile file3) throws IOException {
+        book.setUser(getUserByPrincipal(principal));
         Image image1;
         Image image2;
         Image image3;
@@ -39,10 +44,15 @@ public class BookService {
             image3 = toImageEntity(file3);
             book.addImageToBook(image3);
         }
-        log.info("Saving new book. Book name: {}; Author: {}", book.getName(), book.getAuthor());
+        log.info("Saving new book. Book name: {}; User: {}", book.getName(), book.getUser().getEmail());
         Book bookFromDB = bookRepository.save(book);
         bookFromDB.setPreviewImageId(bookFromDB.getImageList().get(0).getId());
         bookRepository.save(book);
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if(principal == null) return new User();
+        return userRepository.findByEmail(principal.getName());
     }
 
     private Image toImageEntity(MultipartFile file) throws IOException {

@@ -26,9 +26,10 @@ public class Book {
     private String description;
     @Column(name = "price")
     private int price;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "book")
     private List<Image> imageList = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    private User user;
     private Long previewImageId;
     private LocalDateTime dateOfCreate;
     @PrePersist
