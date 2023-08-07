@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pa">
 <head>
-    <title>Library</title>
+    <title>Library54</title>
 </head>
 <body>
 <h1>Welcome!</h1><hr>
@@ -11,6 +11,9 @@
         <input type="hidden" name="_csrf" value="${_csrf.token}">
         <input type="submit" value="Exist"/>
     </form>
+    <#if user.isAdmin()>
+        <a href="/admin">Admin's panel</a>
+    </#if>
 <#else>
     <a href="/login">Login</a>
 </#if>

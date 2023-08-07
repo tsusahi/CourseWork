@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>Library54</title>
 </head>
 <body>
-<h1>Library</h1><hr>
-<h4>Registration</h4>
+<h1>Registration</h1><hr>
 <form action="/registration" method="post">
     Username: <input type="text" name="name"><br><br>
     Email: <input type="email" name="email"><br><br>

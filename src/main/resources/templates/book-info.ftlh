@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>${book.author} ${book.name}</title>
+    <title>Library54</title>
 </head>
 <body>
 <h1>Let's see!</h1>
@@ -12,5 +12,6 @@
 </#list>
 <b>About book: </b>${book.description}<br>
 <b>Price: </b>${book.price}<br>
+<b>Seller: </b><a href="/user/${book.user.id}">${book.user.name}</a><br>
 </body>
 </html>
