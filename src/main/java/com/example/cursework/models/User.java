@@ -1,13 +1,12 @@
 package com.example.cursework.models;
 
 import com.example.cursework.models.enums.Role;
-import jakarta.persistence.*;
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 import java.util.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
@@ -15,21 +14,18 @@ import java.util.*;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "email", unique = true)
+    @Column(unique = true, updatable = false)
     private String email;
-    @Column(name = "phoneNumber")
     private String phoneNumber;
-    @Column(name = "name")
     private String name;
     private boolean active;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private Image avatar;
-    @Column(name = "password", length = 1000)
+    @Column(length = 1000)
     private String password;
-    private LocalDateTime dateOfCreated;
+    private String activationCode;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
@@ -40,14 +36,15 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Book> bookList = new ArrayList<>();
 
-    @PrePersist
-    private void init() {
-        dateOfCreated = LocalDateTime.now();
+    public void addBookToUser(Book book) {
+        book.setUser(this);
+        bookList.add(book);
     }
 
     public boolean isAdmin() {
         return roles.contains(Role.ROLE_ADMIN);
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
@@ -77,4 +74,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
 }

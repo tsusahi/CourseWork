@@ -1,49 +1,31 @@
-<!DOCTYPE html>
-<html lang="pa">
-<head>
-    <title>Library54</title>
-</head>
-<body>
-<h1>Welcome!</h1><hr>
-<#if user.email??>
-    <h3>Username: <i>${user.name}</i></h3>
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}">
-        <input type="submit" value="Exist"/>
+<#import "blocks/template.ftlh" as t>
+<@t.template user>
+    <h1 style="text-align: center">Search books</h1><hr>
+    <form method="get" action="/">
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <label for="searchWord">Search </label>
+                <input type="text" name="searchWord" <#if searchWord??>value="${searchWord}"</#if> class="form-control"
+                       id="searchWord">
+            </div>
+            <button style="width: 100%" type="submit" class="btn btn-dark">Search</button>
+        </div>
     </form>
-    <#if user.isAdmin()>
-        <a href="/admin">Admin's panel</a>
-    </#if>
-<#else>
-    <a href="/login">Login</a>
-</#if>
-<hr>
-<h4>Books from all over the world live here!</h4>
-<form action="/" method="get">
-    Find by name: <input type="text" name="name"><br>
-    <input type="submit" value="Find"/>
-</form>
-<#list books as book>
-    <div>
-        <p><a href="/book/${book.id}"><b>${book.author} "${book.name}"</b></a> | ${book.price} </p>
-    </div>
-<#else>
-    <h3>Books are missing!</h3>
-</#list>
-<#if user.email??>
     <hr>
-    <h3>Create new book</h3>
-    <form action="/book/create" method="post" enctype="multipart/form-data">
-        Book name: <input type="text" name="name"/><br><br>
-        Author: <input type="text" name="author"/><br><br>
-        Description: <input type="text" name="description"/><br><br>
-        Price: <input type="text" name="price"/><br><br>
-        First image: <input type="file" name="file1"/><br><br>
-        Second image: <input type="file" name="file2"/><br><br>
-        Third image: <input type="file" name="file3"/><br><br>
-        <input type="hidden" name="_csrf" value=${_csrf.token}>
-        <input type="submit" value="Add book"/>
-    </form>
-</#if>
-</body>
-</html>
+    <div class="card-columns">
+        <#list books as book>
+            <a href="/book/${book.id}" class="book-link">
+                <div class="card text-white bg-dark my-3 book">
+                    <img src="/images/${book.previewImageId}"
+                         class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">${book.name}</h5>
+                        <p class="card-text">${book.price} ₽</p>
+                    </div>
+                </div>
+            </a>
+        <#else>
+            <h1 style="text-align: center">Not found</h1>
+        </#list>
+    </div>
+</@t.template>

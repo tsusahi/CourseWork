@@ -65,9 +65,18 @@ public class BookService {
         return image;
     }
 
-    public void deleteBook(long id) {
-        log.info("Delete book with id:{}", id);
-        bookRepository.deleteById(id);
+    public void deleteBook(User user, long id) {
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book != null) {
+            if (book.getUser().getId().equals(user.getId())) {
+                bookRepository.delete(book);
+                log.info("Book with id = {} was deleted", id);
+            } else {
+                log.error("User: {} haven't this book with id = {}", user.getEmail(), id);
+            }
+        } else {
+            log.error("Book with id = {} is not found", id);
+        }
     }
 
     public Book getBookByID(Long id) {
